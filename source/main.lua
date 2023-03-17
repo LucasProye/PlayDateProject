@@ -7,5 +7,4 @@ import "libraries/animatedSprite/AnimatedSprite.lua"
 import "games/scenes/simpleScene.lua"
 import "games/scenes/WorldScene.lua"
 
-
 Noble.new(SimpleScene)

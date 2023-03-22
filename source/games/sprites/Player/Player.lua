@@ -114,7 +114,15 @@ function Player:update()
         self:changeState('Idle' .. self.lastDirection, true)
     end
 
-    --[[ if (self.inputMovement.x ~= 0 and self.inputMovement.y == 0)
+    function getRect(x1, y1, x2, y2)
+        local x = math.min(x1, x2)
+        local y = math.min(y1, y2)
+        local w = math.abs(x1 - x2)
+        local h = math.abs(y1 - y2)
+        return playdate.geometry.rect.new(x, y, w, h)
+    end
+
+    if (self.inputMovement.x ~= 0 and self.inputMovement.y == 0)
         or (self.inputMovement.y ~= 0 and self.inputMovement.x == 0) then
 
         local rect = getRect(
@@ -127,7 +135,7 @@ function Player:update()
         rect.x = rect.x - 1
         rect.y = rect.y - 1
         rect.w = rect.w + 2
-        rect.h = rect.h + 2
+        rect.h = rect.h + 2 
 
         local collisions = playdate.graphics.sprite.querySpritesInRect(rect)
 
@@ -159,5 +167,5 @@ function Player:update()
     local x, y, _, _ = self:moveWithCollisions(
         self.x + self.inputMovement.x * self.maxSpeed,
         self.y + self.inputMovement.y * self.maxSpeed
-    ) ]]
+    ) 
 end

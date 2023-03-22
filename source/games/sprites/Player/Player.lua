@@ -7,9 +7,6 @@ playerImagetable = playdate.graphics.imagetable.new('images/character-table-32-3
 function Player:init(i, j, player)
     Player.super.init(self, playerImagetable)
 
-    self:add()
-
-    self.bombs = {}
     self.nbBombMax = 1
     self.power = 1
     self.maxSpeed = 5
@@ -36,7 +33,6 @@ function Player:init(i, j, player)
     self:moveTo(x, y - 8)
     self:playAnimation()
     self:setZIndex(10)
-
 
     local playerShiftSpriteSheet = player == P1 and 0 or 5
     local animationSpeed = 5
@@ -93,9 +89,6 @@ function Player:Move(x, y)
     self.inputMovement = inputMovement
 end
 
-function Player:collisionResponse(other)
-    return 'slide'
-end
 
 function Player:update()
     Player.super.update(self)
@@ -121,10 +114,11 @@ function Player:update()
         self:changeState('Idle' .. self.lastDirection, true)
     end
 
-    if (self.inputMovement.x ~= 0 and self.inputMovement.y == 0)
+    --[[ if (self.inputMovement.x ~= 0 and self.inputMovement.y == 0)
         or (self.inputMovement.y ~= 0 and self.inputMovement.x == 0) then
+
         local rect = getRect(
-            self.x,
+            self.x, 
             self.y + 8,
             self.x + self.inputMovement.x * 16,
             self.y + 8 + self.inputMovement.y * 16
@@ -148,6 +142,7 @@ function Player:update()
         end
 
         if not isObstacleFront then
+
             if self.lastDirection == "Left" or self.lastDirection == "Right" then
                 local i, j = Noble.currentScene():getcoordinates(self.x, self.y + 8)
                 local _, y = Noble.currentScene():getPositionAtCoordinates(i, j)
@@ -164,34 +159,5 @@ function Player:update()
     local x, y, _, _ = self:moveWithCollisions(
         self.x + self.inputMovement.x * self.maxSpeed,
         self.y + self.inputMovement.y * self.maxSpeed
-    )
-
-    self.inputMovement.x = 0
-    self.inputMovement.y = 0
-
-
-    if #self.bombs > 0 and self.bombs[1].isExploded then
-        table.remove(self.bombs, 1)
-    end
-end
-
-function Player:dropBomb()
-    local sprites = playdate.graphics.sprite.querySpritesAtPoint(self.x, self.y + 8)
-
-    if sprites ~= nil then
-        for i = 1, #sprites, 1 do
-            if sprites[i]:isa(Bomb) then
-                return
-            end
-        end
-    end
-
-    if #self.bombs >= self.nbBombMax then
-        return
-    end
-
-    local i, j = Noble.currentScene():getcoordinates(self.x, self.y + 8)
-
-    self.bombs[#self.bombs + 1] = Bomb(i, j, self.power)
-    
+    ) ]]
 end

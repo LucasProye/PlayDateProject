@@ -16,12 +16,6 @@ function SimpleScene:init()
     end)
 
     SimpleScene.inputHandler = {
-        upButtonDown = function()
-            menu:selectPrevious()
-        end,
-        downButtonDown = function()
-            menu:selectNext()
-        end,
         AButtonDown = function()
             menu:click()
         end
@@ -30,11 +24,8 @@ end
 
 function SimpleScene:enter()
     SimpleScene.super.enter(self)
-
     playdate.graphics.setBackgroundColor(playdate.graphics.kColorWhite)
-
     sequence = Sequence.new():from(0):to(180, 1, Ease.outBounce)
-
     if sequence then sequence:start() end
 
     local sound = playdate.sound.sampleplayer
@@ -43,7 +34,6 @@ function SimpleScene:enter()
     self.backgroundMusic:play(0, 1)
 
     self.background = NobleSprite("images/background2")
-
     self.background:add()
     self.background:moveTo(200, 120)
 end

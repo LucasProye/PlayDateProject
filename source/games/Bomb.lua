@@ -2,9 +2,9 @@ class('Bomb').extends(TileObject)
 
 function Bomb:init(i,j,power)
     Bomb.super.init(self, i, j, 3, true)
+    
+    local animationSpeed = 10
 
-    -- l'animation est composé de deux phases, 
-    -- une première lente, et la seconde rapide.
     self:addState('BombStart', 1, 3, {
         tickStep = animationSpeed,
         yoyo = true,
@@ -20,8 +20,10 @@ function Bomb:init(i,j,power)
     })
 
     self:playAnimation()
+
+    self:setGroups({collisionGroup.bomb})
     
-    self.states.Bomb.onAnimationEndEvent = function(self)
+    self.states.BombEnd.onAnimationEndEvent = function(self)
         self:explode()
     end
 end

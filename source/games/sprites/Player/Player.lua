@@ -7,6 +7,7 @@ playerImagetable = playdate.graphics.imagetable.new('images/character-table-32-3
 function Player:init(i, j, player)
     Player.super.init(self, playerImagetable)
 
+    self.bombs = {}
     self.nbBombMax = 1
     self.power = 1
     self.maxSpeed = 5
@@ -17,6 +18,21 @@ function Player:init(i, j, player)
     self.inputMovement = playdate.geometry.vector2D.new(0, 0)
 
     self:setCollideRect(8, 16, 16, 16)
+
+    -- on choisit le collision group en fonction du player
+    local playerCollisionGroup = playerNumber == P1 and collisionGroup.player1 
+				or collisionGroup.player2
+    self:setGroups({ playerCollisionGroup })
+
+
+		-- on définit avec quel collision groupe
+		-- le player va pouvoir entrer en collision
+    self:setCollidesWithGroups({
+        collisionGroup.block,
+        collisionGroup.bomb,
+        collisionGroup.item,
+        collisionGroup.explosion
+    })
 
     local playerCollisionGroup = playerNumber == P1 and collisionGroup.player1 or collisionGroup.player2
     self:setGroups({ playerCollisionGroup })
@@ -88,6 +104,37 @@ function Player:Move(x, y)
     inputMovement:normalize()
     self.inputMovement = inputMovement
 end
+
+function Player:dropBomb()
+
+    -- on commence par tester si il y à déjà une bombe déposer
+local sprites = playdate.graphics.sprite.querySpritesAtPoint(self.x, self.y + 8)
+
+if sprites ~= nil then
+    for i = 1, #sprites, 1 do
+        if sprites[i]:isa(Bomb) then
+                            -- on return sans rien faire si c'est déjà le cas
+            return
+        end
+    end
+end
+
+    -- ici on test si le player à déjà poser le max de bombes qu'il peut poser
+if #self.bombs >= self.nbBombMax then
+            -- si c'est le cas on return sans rien faire
+    return
+end
+
+
+    -- On dépose la bombe au niveau de la position du player
+local i, j = Noble.currentScene():getcoordinates(self.x, self.y + 8)
+    -- on créer la nouvelle Bombe et on l'ajoute à la liste des bombes du player
+self.bombs[#self.bombs + 1] = Bomb(i, j, self.power)
+
+end
+
+
+
 
 
 function Player:update()
@@ -171,4 +218,8 @@ function Player:update()
 
     self.inputMovement.x = 0
     self.inputMovement.y = 0
+
+    if #self.bombs > 0 and self.bombs[1].isExploded then
+        table.remove(self.bombs, 1)
+    end
 end

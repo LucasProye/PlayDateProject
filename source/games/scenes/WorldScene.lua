@@ -94,7 +94,7 @@ function WorldScene:enter()
         end
     end
 
-    local nbBloc = math.floor(#emptySpace * 0.2)
+    local nbBloc = math.floor(#emptySpace * 0.55)
 
     while nbBloc ~= 0 do
         local elementsIndex = math.random(#emptySpace)

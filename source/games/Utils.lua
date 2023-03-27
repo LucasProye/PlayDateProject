@@ -16,3 +16,15 @@ function getObjectOfClass(list, type)
     end
     return nil
 end
+
+function bit(p)
+    return 2 ^ (p - 1) -- 1-based indexing
+end
+
+function hasbit(x, p)
+    return x % (p + p) >= p
+end
+
+function maskContainsGroup(mask, group)
+    return hasbit(mask, bit(group))
+end

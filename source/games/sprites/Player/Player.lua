@@ -133,10 +133,6 @@ self.bombs[#self.bombs + 1] = Bomb(i, j, self.power)
 
 end
 
-
-
-
-
 function Player:update()
     Player.super.update(self)
 

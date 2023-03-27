@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\source",
+    "\\source\\games",
+    "\\source\\games\\scenes",
+    "\\source\\games\\sprites",
+    "\\source\\games\\sprites\\Player",
+    "\\source\\games\\sprites\\Tile",
+    "\\source\\games\\sprites\\Tile\\Block"
+  ],
+  "SelectedNode": "\\source\\games\\scenes\\simpleScene.lua",
+  "PreviewInSolutionExplorer": false
+}

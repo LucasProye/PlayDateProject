@@ -168,4 +168,7 @@ function Player:update()
         self.x + self.inputMovement.x * self.maxSpeed,
         self.y + self.inputMovement.y * self.maxSpeed
     ) 
+
+    self.inputMovement.x = 0
+    self.inputMovement.y = 0
 end

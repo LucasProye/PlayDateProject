@@ -1,6 +1,5 @@
 class("Heuristic").extends()
 
-
 function manhattanDistance(ax, ay, bx, by)
     local dx = math.abs(ax - bx)
     local dy = math.abs(ay - by)

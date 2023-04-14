@@ -1,6 +1,5 @@
 class("AstarPathFinder").extends()
 
--- Astar Path Finder prend un map Handler en paramètre
 function AstarPathFinder:init(mapHandler)
     self.mapHandler = mapHandler
 end

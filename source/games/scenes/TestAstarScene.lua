@@ -15,11 +15,11 @@ collisionGroup = {
 function TestAstarScene:init()
     TestAstarScene.super.init(self)
 
-    self.tileSize = 16       -- la size d'une tile en pixels
-    self.gameTileShiftX = 6  -- le décallage horizontale en nombre de tile
-    self.gameTileShiftY = 1  -- le décallage verticale en nombre de tile
-    self.gameTileWidth = 13  -- la largeur en nombre de tile
-    self.gameTileHeight = 13 -- la hauteur en nombre de tile
+    self.tileSize = 16    
+    self.gameTileShiftX = 6  
+    self.gameTileShiftY = 1  
+    self.gameTileWidth = 13  
+    self.gameTileHeight = 13 
 
     TestAstarScene.inputHandler = {
         upButtonHold = function()
@@ -74,33 +74,28 @@ function TestAstarScene:enter()
         --self:addElement(Bomb, node.i, node.j)
     --end
 
-    -- add block on top and down
     for i = 1, self.gameTileWidth, 1 do
         self:addElement(UnbreakableBlock, i, 1)
         self:addElement(UnbreakableBlock, i, self.gameTileHeight)
     end
 
-    -- add block on right and left
     for j = 2, self.gameTileHeight - 1, 1 do
         self:addElement(UnbreakableBlock, 1, j)
         self:addElement(UnbreakableBlock, self.gameTileWidth, j)
     end
 
-    -- add block on middle
     for i = 3, self.gameTileWidth - 2, 2 do
         for j = 3, self.gameTileHeight - 2, 2 do
             self:addElement(UnbreakableBlock, i, j)
         end
     end
 
-    -- add sprite to startPose and end pose
     self:addElement(NoBlock, 2, 7)
     self:addElement(NoBlock, 12, 7)
 
     self.player1 = Player(2, 2, P1)
     Player(12, 7, P2)
 
-    --add BreakableBlock randomly
     local emptySpace = {}
     local emptySpaceIndex = 1
 
@@ -149,8 +144,6 @@ function TestAstarScene:enter()
         nbBloc = nbBloc - 1
     end
 
-
-    -- add Floor
     for i = 2, self.gameTileWidth - 1, 1 do
         for j = 2, self.gameTileHeight - 1, 1 do
             self:addElement(Floor, i, j)
@@ -194,8 +187,6 @@ function TestAstarScene:getPositionAtCoordinates(i, j)
         ((j - 1) + 0.5 + self.gameTileShiftY) * self.tileSize
 end
 
--- le 0.5 disparait car pour faire l'arrondi on ajoute 0.5,
--- puis on utilise la fonction floor
 function TestAstarScene:getcoordinates(x, y)
     return math.floor((x / self.tileSize) - self.gameTileShiftX + 1),
         math.floor((y / self.tileSize) - self.gameTileShiftY + 1)

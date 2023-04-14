@@ -16,7 +16,6 @@ function AstarNode:update(G, H, parent)
     self.parent = parent
 end
 
--- test si un node à les meme coordonées
 function AstarNode:asSameCoordinate(node)
     return node.i == self.i and node.j == self.j
 end

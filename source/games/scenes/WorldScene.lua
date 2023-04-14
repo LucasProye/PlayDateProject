@@ -15,11 +15,11 @@ collisionGroup = {
 function WorldScene:init()
     WorldScene.super.init(self)
 
-    self.tileSize = 16       -- la size d'une tile en pixels
-    self.gameTileShiftX = 6  -- le décallage horizontale en nombre de tile
-    self.gameTileShiftY = 1  -- le décallage verticale en nombre de tile
-    self.gameTileWidth = 13  -- la largeur en nombre de tile
-    self.gameTileHeight = 13 -- la hauteur en nombre de tile
+    self.tileSize = 16      
+    self.gameTileShiftX = 6  
+    self.gameTileShiftY = 1  
+    self.gameTileWidth = 13  
+    self.gameTileHeight = 13 
 
     WorldScene.inputHandler = {
         upButtonHold = function()

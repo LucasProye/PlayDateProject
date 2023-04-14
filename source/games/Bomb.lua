@@ -58,7 +58,7 @@ function Bomb:init(i, j, power)
                 if sprite ~= nil then
                     if sprite:isa(Item) then
                         sprite:remove()
-                        GameScene:addElement(ItemExplode, i + di, j + dj)
+                        WorldScene:addElement(ItemExplode, i + di, j + dj)
                         return true
                     end
 

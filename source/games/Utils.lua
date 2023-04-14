@@ -18,7 +18,7 @@ function getObjectOfClass(list, type)
 end
 
 function bit(p)
-    return 2 ^ (p - 1) -- 1-based indexing
+    return 2 ^ (p - 1) 
 end
 
 function hasbit(x, p)

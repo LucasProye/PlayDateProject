@@ -48,6 +48,7 @@ function WorldScene:enter()
     math.randomseed(playdate.getSecondsSinceEpoch())
 
     self.player1 = Player(2, 2, P1)
+    Player(12, 7, P2)
 
 
     self.gameTileTable = {}
@@ -94,7 +95,33 @@ function WorldScene:enter()
         end
     end
 
-    local nbBloc = math.floor(#emptySpace * 0.55)
+    local items = {}
+    for i = 1, 15, 1 do
+        items[#items + 1] = FlameItem
+        items[#items + 1] = BombItem
+        items[#items + 1] = SpeedItem
+    end
+    items[#items + 1] = MegaFlameItem
+
+    local index = 1
+    local nbBloc = 80
+
+    while nbBloc ~= 0 do
+        local elementsIndex = math.random(#emptySpace)
+        local coord = table.remove(emptySpace, elementsIndex)
+        local i = coord[1]
+        local j = coord[2]
+
+        self:addElement(BreakableBlock, i, j)
+
+        if index <= #items then
+            self:addElement(items[index], i, j)
+            index = index + 1
+        end
+        nbBloc = nbBloc - 1
+    end
+
+    local nbBloc = math.floor(#emptySpace * 0.6)
 
     while nbBloc ~= 0 do
         local elementsIndex = math.random(#emptySpace)

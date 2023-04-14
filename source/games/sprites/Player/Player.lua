@@ -185,6 +185,36 @@ function Player:update()
         local isObstacleFront = false
         if collisions then
             for i = 1, #collisions, 1 do
+                if collisions[i]:isa(Explosion) then
+                    self:kill()
+                    return 'overlap'
+                end
+
+                if collisions[i]:isa(Item) then
+                    collisions[i]:take()
+
+                    if collisions[i]:isa(BombItem) then
+                        self.nbBombMax = self.nbBombMax + 1
+                    end
+
+                    if collisions[i]:isa(FlameItem) then
+                        self.power = self.power + 1
+                    end
+
+                    if collisions[i]:isa(MegaFlameItem) then
+                        self.power = self.power + 10
+                    end
+
+                    if collisions[i]:isa(SpeedItem) then
+                        self.maxSpeed = self.maxSpeed + 0.5
+                    end
+
+                    if collisions[i]:isa(KickItem) then
+                        self.canKick = true
+                    end
+
+                    return 'overlap'
+                end
                 if collisions[i]:isa(Block) then
                     isObstacleFront = true
                     break

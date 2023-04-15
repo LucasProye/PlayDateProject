@@ -4,6 +4,20 @@ function AstarPathFinder:init(mapHandler)
     self.mapHandler = mapHandler
 end
 
+function AstarPathFinder:getBestOpenNode()
+    local bestNode = self.openNodes[1]
+
+    for i = 2, #self.openNodes, 1 do
+        local node = self.openNodes[i]
+
+        if node.F < bestNode.F then
+            bestNode = node
+        end
+    end
+
+    return bestNode
+end
+
 function containsNode(list, node)
     for _, nodeInList in pairs(list) do
         if nodeInList:asSameCoordinate(node) then
@@ -20,7 +34,6 @@ function AstarPathFinder:findPath(startNode, endNode, heuristicFunction)
     startNode.H = heuristicFunction(startNode.i, startNode.j, endNode.i, endNode.j)
     table.insert(self.openNodes, startNode)
 
-
     local success = false
 
     while not success and #self.openNodes ~= 0 do
@@ -28,28 +41,27 @@ function AstarPathFinder:findPath(startNode, endNode, heuristicFunction)
 
         table.remove(self.openNodes, table.indexOfElement(self.openNodes, bestOpenNode))
         table.insert(self.closedNodes, bestOpenNode)
-				
-				if bestOpenNode:asSameCoordinate(endNode) then
+
+        if bestOpenNode:asSameCoordinate(endNode) then
             success = true
             break
         end
 
-				local adjacentNodes = self.mapHandler:getAdjacentNodes(bestOpenNode)
+        local adjacentNodes = self.mapHandler:getAdjacentNodes(bestOpenNode)
 
         for i = 1, #adjacentNodes, 1 do
             local node = adjacentNodes[i]
 
-						if containsNode(self.closedNodes, node) then
+            if containsNode(self.closedNodes, node) then
                 goto continue
             end
-						
-						node:update(
+            node:update(
                 bestOpenNode.G + self.mapHandler:GetDistanceBetweenNode(node, bestOpenNode, heuristicFunction),
                 heuristicFunction(node.i, node.j, endNode.i, endNode.j),
                 bestOpenNode
             )
 
-						local indexOfNode = table.indexOfElement(self.openNodes)
+            local indexOfNode = table.indexOfElement(self.openNodes)
 
             if indexOfNode == nil then
                 table.insert(self.openNodes, node)
@@ -58,28 +70,26 @@ function AstarPathFinder:findPath(startNode, endNode, heuristicFunction)
                 self.openNodes[indexOfNode] = node
             end
 
-						::continue::
-				end
+            ::continue::
+        end
+    end
 
-		end
+    local path = AstarPath(true, {})
+    local pathNode = self.closedNodes[#self.closedNodes]
 
-		local path = AstarPath(success, {})
-
-		local pathNode = self.closedNodes[#self.closedNodes]
-
-        if not success then
-            for i = 1, #self.closedNodes - 1, 1 do
-                if self.closedNodes[i].H < pathNode.H then
-                    pathNode = self.closedNodes[i]
-                end
+    if not success then
+        for i = 1, #self.closedNodes - 1, 1 do
+            if self.closedNodes[i].H < pathNode.H then
+                pathNode = self.closedNodes[i]
             end
         end
+    end
 
-        repeat
-            print(pathNode.i, pathNode.j)
-            table.insert(path.nodes, pathNode)
-            pathNode = pathNode.parent
-        until pathNode == nil
+    repeat
+        print(pathNode.i, pathNode.j)
+        table.insert(path.nodes, pathNode)
+        pathNode = pathNode.parent
+    until pathNode == nil
 
-        return path  
+    return path
 end

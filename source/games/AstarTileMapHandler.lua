@@ -13,7 +13,6 @@ function AstarTileMapHandler:getNode(i, j)
         return nil
     end
 
-
     if self.tiles[i][j] == 1 then
         return nil
     end
@@ -52,4 +51,3 @@ end
 function AstarTileMapHandler:GetDistanceBetweenNode(A, B, heuristicFunction)
     return heuristicFunction(A.i, A.j, B.i, B.j)
 end
-

@@ -1,5 +1,5 @@
-TestAstarScene = {}
-class("TestAstarScene").extends(NobleScene)
+AstarTestScene = {}
+class("AstarTestScene").extends(NobleScene)
 
 collisionGroup = {
     p1 = 1,
@@ -12,16 +12,16 @@ collisionGroup = {
     ignoreP2 = 8,
 }
 
-function TestAstarScene:init()
-    TestAstarScene.super.init(self)
+function AstarTestScene:init()
+    AstarTestScene.super.init(self)
 
-    self.tileSize = 16    
-    self.gameTileShiftX = 6  
-    self.gameTileShiftY = 1  
-    self.gameTileWidth = 13  
-    self.gameTileHeight = 13 
+    self.tileSize = 16
+    self.gameTileShiftX = 6
+    self.gameTileShiftY = 1
+    self.gameTileWidth = 13
+    self.gameTileHeight = 13
 
-    TestAstarScene.inputHandler = {
+    WorldScene.inputHandler = {
         upButtonHold = function()
             self.player1:Move(self.player1.inputMovement.x, -1)
         end,
@@ -38,11 +38,10 @@ function TestAstarScene:init()
             self.player1:dropBomb()
         end
     }
-
 end
 
-function TestAstarScene:enter()
-    TestAstarScene.super.enter(self)
+function AstarTestScene:enter()
+    AstarTestScene.super.enter(self)
 
     playdate.graphics.setBackgroundColor(playdate.graphics.kColorBlack)
 
@@ -58,21 +57,6 @@ function TestAstarScene:enter()
             self.gameTileTable[i][j] = {}
         end
     end
-
-    self.astarTileMapHandler = AstarTileMapHandler(self.tiles)
-    self.pathfinder = AstarPathFinder(self.astarTileMapHandler)
-
-    --local path = self.pathFinder:findPath(AstarNode(2, 7), AstarNode(12, 7), manhattanDistance)
-
-    --for i = 2, #path.nodes - 1, 1 do
-        --local node = path.nodes[i]
-        --self:addElement(Bomb, node.i, node.j)
-    --end
-
-    --if not path.success then  
-        --local node = path.nodes[1]
-        --self:addElement(Bomb, node.i, node.j)
-    --end
 
     for i = 1, self.gameTileWidth, 1 do
         self:addElement(UnbreakableBlock, i, 1)
@@ -93,7 +77,7 @@ function TestAstarScene:enter()
     self:addElement(NoBlock, 2, 7)
     self:addElement(NoBlock, 12, 7)
 
-    self.player1 = Player(2, 2, P1)
+    Player(2, 7, P1)
     Player(12, 7, P2)
 
     local emptySpace = {}
@@ -108,33 +92,7 @@ function TestAstarScene:enter()
         end
     end
 
-    local items = {}
-    for i = 1, 15, 1 do
-        items[#items + 1] = FlameItem
-        items[#items + 1] = BombItem
-        items[#items + 1] = SpeedItem
-    end
-    items[#items + 1] = MegaFlameItem
-
-    local index = 1
-    local nbBloc = 15
-
-    while nbBloc ~= 0 do
-        local elementsIndex = math.random(#emptySpace)
-        local coord = table.remove(emptySpace, elementsIndex)
-        local i = coord[1]
-        local j = coord[2]
-
-        self:addElement(BreakableBlock, i, j)
-
-        if index <= #items then
-            self:addElement(items[index], i, j)
-            index = index + 1
-        end
-        nbBloc = nbBloc - 1
-    end
-
-    local nbBloc = math.floor(#emptySpace * 0.2)
+    local nbBloc = math.floor(#emptySpace * 0.3)
 
     while nbBloc ~= 0 do
         local elementsIndex = math.random(#emptySpace)
@@ -160,44 +118,58 @@ function TestAstarScene:enter()
         end
     end
 
+    self.astarTileMapHandler = AstarTileMapHandler(self.tiles)
+    self.pathFinder = AstarPathFinder(self.astarTileMapHandler)
+
+    local path = self.pathFinder:findPath(AstarNode(2, 7), AstarNode(12, 7), manhattanDistance)
+
+    for i = 2, #path.nodes - 1, 1 do
+        local node = path.nodes[i]
+        self:addElement(Bomb, node.i, node.j)
+    end
+
+    if not path.success then
+        local node = path.nodes[1]
+        self:addElement(Bomb, node.i, node.j)
+    end
 end
 
-function TestAstarScene:start()
-    TestAstarScene.super.start(self)
+function AstarTestScene:start()
+    AstarTestScene.super.start(self)
 end
 
-function TestAstarScene:drawBackground()
-    TestAstarScene.super.drawBackground(self)
+function AstarTestScene:drawBackground()
+    AstarTestScene.super.drawBackground(self)
 end
 
-function TestAstarScene:update()
-    TestAstarScene.super.update(self)
+function AstarTestScene:update()
+    AstarTestScene.super.update(self)
 end
 
-function TestAstarScene:exit()
-    TestAstarScene.super.exit(self)
+function AstarTestScene:exit()
+    AstarTestScene.super.exit(self)
 end
 
-function TestAstarScene:finish()
-    TestAstarScene.super.finish(self)
+function AstarTestScene:finish()
+    AstarTestScene.super.finish(self)
 end
 
-function TestAstarScene:getPositionAtCoordinates(i, j)
+function AstarTestScene:getPositionAtCoordinates(i, j)
     return ((i - 1) + 0.5 + self.gameTileShiftX) * self.tileSize,
         ((j - 1) + 0.5 + self.gameTileShiftY) * self.tileSize
 end
 
-function TestAstarScene:getcoordinates(x, y)
+function AstarTestScene:getcoordinates(x, y)
     return math.floor((x / self.tileSize) - self.gameTileShiftX + 1),
         math.floor((y / self.tileSize) - self.gameTileShiftY + 1)
 end
 
-function TestAstarScene:addElement(Type, i, j, ...)
+function AstarTestScene:addElement(Type, i, j, ...)
     local tileSprites = self.gameTileTable[i][j]
     tileSprites[#tileSprites + 1] = Type(i, j, ...)
 end
 
-function TestAstarScene:updateFloor(i, j)
+function AstarTestScene:updateFloor(i, j)
     local floor = self:getElementOfTypeAt(Floor, i, j)
 
     local caseTable = self.gameTileTable[i][j - 1]
@@ -208,6 +180,6 @@ function TestAstarScene:updateFloor(i, j)
     end
 end
 
-function TestAstarScene:getElementOfTypeAt(type, i, j)
+function AstarTestScene:getElementOfTypeAt(type, i, j)
     return getObjectOfClass(self.gameTileTable[i][j], type)
 end

@@ -45,6 +45,11 @@ function WorldScene:enter()
 
     playdate.graphics.setBackgroundColor(playdate.graphics.kColorBlack)
 
+    local sound = playdate.sound.sampleplayer
+    self.backgroundMusic = sound.new('sounds/theme.wav')
+    self.backgroundMusic:setVolume(0.3)
+    self.backgroundMusic:play(0, 1)
+
     math.randomseed(playdate.getSecondsSinceEpoch())
 
     self.player1 = Player(2, 2, P1)
@@ -104,7 +109,7 @@ function WorldScene:enter()
     items[#items + 1] = MegaFlameItem
 
     local index = 1
-    local nbBloc = 80
+    local nbBloc = 15
 
     while nbBloc ~= 0 do
         local elementsIndex = math.random(#emptySpace)
@@ -121,7 +126,7 @@ function WorldScene:enter()
         nbBloc = nbBloc - 1
     end
 
-    local nbBloc = math.floor(#emptySpace * 0.6)
+    local nbBloc = math.floor(#emptySpace * 0.3)
 
     while nbBloc ~= 0 do
         local elementsIndex = math.random(#emptySpace)
